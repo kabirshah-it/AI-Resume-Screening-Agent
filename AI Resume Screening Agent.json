@@ -1,0 +1,288 @@
+{
+  "name": "AI Resume Screening Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Submit your Resume",
+        "formDescription": "Fill the form and submit your Resume only in PDF form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Full Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Upload your Resume",
+              "fieldType": "file",
+              "acceptFileTypes": "pdf",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -576,
+        -32
+      ],
+      "id": "58756ee2-0db8-4b8d-b606-5325e4dd2b23",
+      "name": "On form submission",
+      "webhookId": "8977cce9-46d0-42f9-a7fd-3bc01578fd58"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "Upload_your_Resume",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -304,
+        -224
+      ],
+      "id": "c8223cca-3c45-4af8-8c3f-982ab1e4eab4",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Hiring Assistant.\n\nEvaluate the resume for the role: AI Automation Engineer\n\nHOME\nABOUT\nACTIVITIES\nMEMBERSHIP\nRESOURCES\nPUBLICATIONS\nRFQs/RFPs\nJOBS\nCONTACT\n\nAI Automation Engineer – AI Agents & Intelligent Systems (Remote)\nOpen\nMadina Specialized Center\n\nQuick Summary\nType\nFull Time\nLocation\nBalkh, Herat, Kabul, Kandahar, Nangarhar - Fully Remote\nCategory\nEngineering, Information Technology, Telecommunications, Telecom, IT\nPublished\n2026-04-28\nNationality\nNational\nGender\nMale/Female\nSalary\nAs per relevant skills and experience\nContract Duration\nOne Year (Extendable)\nVacancy Number\nM-15\nNo of Job\n3\nEducation\nComputer Science, Software Engineering, Artificial Intelligence, Data Science, Information Technology, Computer Engineering, Cyber Security\n\nExperience\nRefer to Job Requirements Section\n\nDeadline\n\n2026-06-30\n\n\nPrint\n\nShare\nAbout the Company\nThis opportunity is for a Madina Specialized Center subproject focused on AI Agents and Automation Systems.\n\nThe subproject is building AI-driven solutions through a dedicated initiative centered on AI agents, automation workflows, and connected digital systems. The goal is to build practical, intelligent solutions that solve real business problems using modern AI technologies.\n\nWe are hiring 3 AI Automation Engineers to join the technical team. This is a hands-on role for people who enjoy building working systems, improving workflows, and turning ideas into practical solutions.\n\nJob Summary\nThe AI Automation Engineer will support the design, development, and improvement of AI-powered systems and automation workflows.\n\nWhat You Will Do\n\nBuild AI agents and intelligent automation workflows\nConnect APIs, webhooks, external services, and data sources into working systems\nHelp develop AI-powered platforms using modern cloud tools and databases\nWork with LLMs through APIs and, where needed, local model environments\nImprove system performance, reliability, and technical quality\nSupport testing, debugging, and ongoing improvement of workflows and integrations\nResearch and try useful new AI tools, frameworks, and methods\nTurn high-level ideas and system logic into practical working solutions\nYou will receive clear direction on system logic and expected outcomes. Your role is to implement efficiently and improve the technical side of the system.\n\nWork Arrangement\n\nFully remote\nMust have full access to interest, electiricy, computer and equipment needed to manage the tasks remotely\nJob Requirements\nWe are looking for candidates with solid practical experience in most of the following areas:\n\nCore Technical Requirements\n\nExperience with Google Cloud Platform (GCP) or similar cloud platforms\nExperience working with LLMs, APIs, prompt-based workflows, or agent-based systems\nAbility to build or support automation platforms and workflows\nGood understanding of SQL and/or NoSQL databases\nPractical experience with REST APIs, JSON, webhooks, and Python\nExperience with automation tools such as Make, n8n, Zapier, or similar systems\nGood problem-solving, testing, and debugging skills\nBasic understanding of security, access control, and safe system design\nPortfolio Requirement\n\nTo apply, you must submit at least 4 real project samples related to one or more of the following:\n\nAI agents\nAutomation workflows\nAPI integrations\nAI-powered bots or intelligent systems\nAccepted formats:\n\n\n\n\nTASK:\n1. Analyze resume\n2. Score from 0–100\n3. Decide: SHORTLIST or REJECT\n4. Give short reason (max 3 lines)\n\nOUTPUT MUST BE VALID JSON ONLY:\n\n{\n  \"score\": number,\n  \"decision\": \"SHORTLIST\" or \"REJECT\",\n  \"reason\": \"short explanation\"\n}\n\nRESUME TEXT:\n{{ $json.clean_data }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        112,
+        -144
+      ],
+      "id": "0f276edc-b25e-4d8b-935d-72b2f6647d08",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        96
+      ],
+      "id": "1368d15a-b11e-4f65-8ee7-1f1e8eb209e4",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ZOiXj862alsqdwJg",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d708c768-0e49-4c3d-9e2e-dee5a5c8c9cd",
+              "leftValue": "={{ $json.text.parseJson().score }}",
+              "rightValue": "={{ Number(70) }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        192,
+        112
+      ],
+      "id": "d000279c-8018-42a5-a381-8c861c09739f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "About your Resume",
+        "emailType": "text",
+        "message": "=Congratulations!  Your application has been shortlisted.  Score:{{ $json.text.parseJson().score }}   Reason: {{ $json.text.parseJson().reason }} \nDecision: {{ $json.text.parseJson().decision }}\nWe will contact you soon.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        -48
+      ],
+      "id": "3a5f82ec-6349-4e75-a53d-0659a3b5f85d",
+      "name": "Send a message",
+      "webhookId": "bd919d86-b347-437c-b607-c2adbe8a2aea",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NMA5Iar4F5xm7m6u",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "About your Resume to me",
+        "emailType": "text",
+        "message": "=Thank you for applying.  Unfortunately, you were not shortlisted.  Score: Reason: {{ $json.text.parseJson().score }} Reson: {{ $json.text.parseJson().reason }}  You may apply again after improving your skills.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        208
+      ],
+      "id": "b9343b35-0cbe-4922-99ae-f73ebbf94c6a",
+      "name": "Send a message1",
+      "webhookId": "2d654c95-f0ac-4b52-92f5-336ee5eafd73",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NMA5Iar4F5xm7m6u",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2cbce71-c54c-4118-bbb0-6ef39098cddc",
+              "name": "clean_data",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -96,
+        -224
+      ],
+      "id": "dcc2a901-eaa6-4a85-a47f-2744fa99bfdd",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "47f47f5d-af9b-46f2-b081-12dd84364e11",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1465bc2e140438d948ccfb1156dc42ba256af99c91930ea733b55aa119354ae5"
+  },
+  "nodeGroups": [],
+  "id": "jbINNSSrnTLAXixy",
+  "tags": []
+}
